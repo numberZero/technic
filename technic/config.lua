@@ -12,6 +12,7 @@ local defaults = {
 	enable_radiation_protection = "true",
 	enable_entity_radiation_damage = "true",
 	enable_longterm_radiation_damage = "true",
+	radiation_shielding_multiplier = 0.1,
 }
 
 for k, v in pairs(defaults) do

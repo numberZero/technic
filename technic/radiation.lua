@@ -245,6 +245,7 @@ local radiated_players = {}
 local armor_enabled = technic.config:get_bool("enable_radiation_protection")
 local entity_damage = technic.config:get_bool("enable_entity_radiation_damage")
 local longterm_damage = technic.config:get_bool("enable_longterm_radiation_damage")
+local shielding_coef = technic.config:get("radiation_shielding_multiplier")
 
 local function apply_fractional_damage(o, dmg)
 	local dmg_int = math.floor(dmg)
@@ -268,11 +269,11 @@ local function calculate_base_damage(node_pos, object_pos, strength)
 	for ray_pos in technic.trace_node_ray(node_pos,
 			vector.direction(node_pos, object_pos), dist) do
 		local shield_name = minetest.get_node(ray_pos).name
-		shielding = shielding + node_radiation_resistance(shield_name) * 0.025
+		shielding = shielding + node_radiation_resistance(shield_name)
 	end
 
 	local dmg = (strength * strength) /
-		(math.max(0.75, dist * dist) * math.exp(shielding))
+		(math.max(0.75, dist * dist) * math.exp(shielding * shielding_coef))
 
 	if dmg < rad_dmg_cutoff then return end
 	return dmg
